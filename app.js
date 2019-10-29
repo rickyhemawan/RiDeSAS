@@ -34,7 +34,11 @@ const SasModel = {
 app.get("/", function(req, res){
   var someone = new SasModel.Applicant({idType: "Passport", idNumber: 123});
   console.log(someone.applicantID);
-  res.render("home");
+  res.render("newQualificationType");
+});
+
+app.post("/", function(req,res){
+  console.log(req.body);
 });
 
 app.listen(3000, function() {
