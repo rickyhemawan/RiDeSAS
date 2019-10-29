@@ -32,13 +32,19 @@ const SasModel = {
 // ------------------------------------------------
 
 app.get("/", function(req, res){
-  var someone = new SasModel.Applicant({idType: "Passport", idNumber: 123});
-  console.log(someone.applicantID);
+  // var someone = new SasModel.Applicant({idType: "Passport", idNumber: 123});
+  // console.log(someone.applicantID);
   res.render("newQualificationType");
 });
 
 app.post("/", function(req,res){
   console.log(req.body);
+  console.log("----------");
+  console.log("qualificationName: " + req.body.qualificationName);
+  console.log("----------");
+  console.log("gradeList: " + req.body.gradeList);
+  console.log("----------");
+  res.redirect("/");
 });
 
 app.listen(3000, function() {
