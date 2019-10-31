@@ -39,6 +39,10 @@ app.get("/qualification", function(req,res){
   res.render("sasAdminQualification");
 });
 
+app.get("/university", function(req,res){
+  res.render("sasAdminUniversity");
+
+});
 app.get("/qualification/new-qualification", function(req, res){
   // var someone = new SasModel.Applicant({idType: "Passport", idNumber: 123});
   // console.log(someone.applicantID);
@@ -54,6 +58,10 @@ app.post("/qualification/new-qualification", function(req,res){
   console.log("----------");
   console.log(req.body.maxScore);
   res.redirect("/qualification");
+});
+
+app.get("/university/new-university", function(req, res){
+  res.render("sasAdminNewUniversity");
 });
 
 
