@@ -1,19 +1,33 @@
 //jshint esversion: 6
 
-var gradeList = [];
+let gradeList = [];
 
-$('#submit-new-qualification-type').click(function(){
+$('#qualification-type-form').on('submit', function(e){
+
+  e.preventDefault();
+
+  let method = $(this).attr('method');
+  let action = $(this).attr('action');
+
   $.ajax({
-    type: 'post',
+    type: method,
+    url: action,
     data:{
       qualificationName: $.trim($("#qualificationName"). val()),
-      maxScore: $.trim($("#maxScore"). val()),
-      minScore: $.trim($("#minScore"). val()),
+      maxScore: $("#maxScore").val(),
+      minScore: $("#minScore").val(),
       calcDescription: $.trim($("#calcDescription"). val()),
       gradeList: gradeList,
     },
-    url: '/',
+    success: function(data){
+      console.log(data);
+      window.location = "/qualification";
+    }
+
  });
+
+ return false;
+
 });
 
 $('#add-grade-button').click(function() {

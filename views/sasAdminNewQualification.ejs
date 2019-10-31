@@ -1,6 +1,6 @@
 <%- include("sas_admin_partials/header") %>
 
-<form class="form-signin">
+<form id="qualification-type-form" class="form-signin" action="/qualification/new-qualification" method="post" >
   <h1 class="main-title">New Qualification Type</h1>
   <label class="sized-box">Qualification Name</label>
   <input type="text" class="form-control top-form" id="qualificationName" placeholder="Input Name">
@@ -8,9 +8,9 @@
 
   <label class="sized-box">Score</label>
   <div class="form-inline">
-    <input type="text" class="form-control middle-form" placeholder="Minimum Score" id="minScore">
+    <input type="number" class="form-control middle-form" placeholder="Minimum Score" id="minScore">
     <label class="form-control middle-form">&#8212;</label>
-    <input type="text"  class="form-control middle-form" placeholder="Maximum Score" id="maxScore">
+    <input type="number"  class="form-control middle-form" placeholder="Maximum Score" id="maxScore">
   </div>
 
 
@@ -27,10 +27,10 @@
 
   <label class="sized-box">Result Calculation Description</label>
   <textarea class="form-control bottom-form" placeholder="Input Description" id="calcDescription"></textarea>
-  <button id="submit-new-qualification-type" class="btn btn-lg btn-primary btn-block">Add New Qualification</button>
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Qualification</button>
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="/script/newQualificationType.js" charset="utf-8"></script>
+<script src="/script/sasAdminNewQualification.js" charset="utf-8"></script>
 
 <%- include("sas_admin_partials/footer") %>
