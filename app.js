@@ -4,6 +4,12 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const _ = require('lodash');
+const mongoose = require('mongoose');
+
+// Auth session and cookies import
+const session = require('express-session');
+const passport = require('passport');
+const passportLocalMongoose = require("passport-local-mongoose");
 
 const app = express();
 
@@ -12,44 +18,47 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
+// Auth session and cookies use
+app.use(session({
+  secret: "Our little secret.",
+  resave: false,
+  saveUninitialized: false
+}));
 
-// -------------- SAS models import --------------
-function importSAS(sasDir){
-  return require(__dirname + '/sas_models/' + sasDir);
-}
-const SasModel = {
-  User : importSAS('user'),
-  SasAdmin : importSAS('sasAdmin'),
-  UniAdmin : importSAS('uniAdmin'),
-  Programme : importSAS('programme'),
-  Applicant : importSAS('applicant'),
-  University : importSAS('university'),
-  Application : importSAS('application'),
-  Qualification : importSAS('qualification'),
-  QualificationResult : importSAS('qualificationResult'),
-  QualificationObtained : importSAS('qualificationObtained'),
-};
-// ------------------------------------------------
+app.use(passport.initialize());
+app.use(passport.session());
 
-app.get("/", function(req,res){
+mongoose.connect("mongodb://localhost:27017/rideSasDB", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+mongoose.set("useCreateIndex", true);
+
+app.get("/", (req,res) => {
   res.render("home", {partials: "sas_admin_partials"});
 });
 
-app.get("/qualification", function(req,res){
+app.get("/register", (req, res) => res.render("register"));
+
+app.post("/register", (req, res) => {
+  console.log(req.body);
+  res.redirect("/register");
+});
+
+app.get("/qualification", (req,res) => {
   res.render("sasAdminQualification");
 });
 
-app.get("/university", function(req,res){
+app.get("/university", (req,res) => {
   res.render("sasAdminUniversity");
 
 });
-app.get("/qualification/new-qualification", function(req, res){
-  // var someone = new SasModel.Applicant({idType: "Passport", idNumber: 123});
-  // console.log(someone.applicantID);
+app.get("/qualification/new-qualification", (req, res) => {
   res.render("sasAdminNewQualification");
 });
 
-app.post("/qualification/new-qualification", function(req,res){
+app.post("/qualification/new-qualification", (req,res) => {
   console.log(req.body);
   console.log("----------");
   console.log("qualificationName: " + req.body.qualificationName);
@@ -60,11 +69,11 @@ app.post("/qualification/new-qualification", function(req,res){
   res.redirect("/qualification");
 });
 
-app.get("/university/new-university", function(req, res){
+app.get("/university/new-university", (req, res) => {
   res.render("sasAdminNewUniversity");
 });
 
 
-app.listen(3000, function() {
+app.listen(3000, () => {
   console.log("Server started on port 3000");
 });
