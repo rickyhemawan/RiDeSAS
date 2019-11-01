@@ -46,6 +46,15 @@ app.post("/register", (req, res) => {
   res.redirect("/register");
 });
 
+app.get("/login", (req, res) => {
+  res.render("login");
+});
+
+app.post("/login", (req, res) => {
+  console.log(req.body);
+  res.redirect("login");
+});
+
 app.get("/qualification", (req,res) => {
   res.render("sasAdminQualification");
 });
