@@ -2,6 +2,8 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const passport = require('passport');
+const passportLocalMongoose = require("passport-local-mongoose");
 
 
 options = {discriminatorKey: 'kind'};
@@ -10,22 +12,22 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Username required'],
   },
-  password: {
-    type: String,
-    required: [true, 'Password required']
-  },
   name: {
     type: String,
-    required: [true, 'Name Required'],
   },
   email: {
       type: String,
-      required: [true, 'Email required.'],
   },
-  options,
-});
+},options);
+
+userSchema.plugin(passportLocalMongoose);
 
 const User = new mongoose.model('User', userSchema);
+
+passport.use(User.createStrategy());
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 const applicantSchema = new Schema({
   idType: {
@@ -44,15 +46,15 @@ const applicantSchema = new Schema({
     type: Date,
     required: [true, 'Date of birth required'],
   },
-  options,
-});
+}, options);
 
-const Applicant = new User.discriminator('Applicant', applicantSchema);
+const Applicant = User.discriminator('Applicant', applicantSchema);
 
-const UniAdmin = new User.discriminator('UniAdmin', {});
-const SasAdmin = new User.discriminator('SasAdmin', {});
+const UniAdmin = User.discriminator('UniAdmin', new Schema({}, options));
+const SasAdmin = User.discriminator('SasAdmin', new Schema({}, options));
 
 module.exports = {
+  User,
   UniAdmin,
   Applicant,
   SasAdmin,

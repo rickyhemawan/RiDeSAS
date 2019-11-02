@@ -1,5 +1,6 @@
 //jshint esversion:6
-
+require('dotenv').config();
+require('events').EventEmitter.defaultMaxListeners = 0;
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
@@ -11,6 +12,8 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require("passport-local-mongoose");
 
+
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -20,7 +23,7 @@ app.use(express.static("public"));
 
 // Auth session and cookies use
 app.use(session({
-  secret: "Our little secret.",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -35,15 +38,65 @@ mongoose.connect("mongodb://localhost:27017/rideSasDB", {
 
 mongoose.set("useCreateIndex", true);
 
+// Models
+const UserModel = require(__dirname + '/models/user');
+
+// Global Variables
+let currentUserName = "";
+const nonAuthPartials = "partials";
+const sasAdminPartials = "sas_admin_partials";
+const userPartials = "user_partials";
+
+// Routes
 app.get("/", (req,res) => {
-  res.render("home", {partials: "sas_admin_partials"});
+  if(req.isAuthenticated() && currentUserName !== ""){
+    UserModel.User.findOne({username: currentUserName}, (error, foundUser) => {
+      console.log(error ? error : foundUser);
+      if(!error){
+        if(foundUser.kind === "SasAdmin"){
+          res.render("home", {partials: sasAdminPartials});
+          return;
+        }
+
+        if(foundUser.kind === "UniAdmin"){
+          console.log("uni admin");
+          return;
+        }
+
+        if(foundUser.kind === "Applicant"){
+          console.log("uni admin");
+          return;
+        }
+      }
+    });
+  }
+  else{
+    res.render("home", {partials: nonAuthPartials});
+  }
+
+
+
 });
 
 app.get("/register", (req, res) => res.render("register"));
 
 app.post("/register", (req, res) => {
   console.log(req.body);
-  res.redirect("/register");
+  const sasAdmin = new UserModel.SasAdmin({
+    username: req.body.username,
+    name: req.body.name,
+    email: req.body.email,
+  });
+
+  UserModel.SasAdmin.register(sasAdmin, req.body.password, (err) => {
+    if(err){
+      console.log('Error while registering!', err);
+    }else{
+      console.log("user registered!");
+      res.redirect('/register');
+    }
+  });
+
 });
 
 app.get("/login", (req, res) => {
@@ -52,7 +105,36 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   console.log(req.body);
-  res.redirect("login");
+  const user = new UserModel.User({
+    username: req.body.username,
+    password: req.body.password,
+  });
+  req.login(user, (err) => {
+    if(err) console.log(err);
+    else{
+      passport.authenticate("local")(req, res, () => {
+        console.log('user is authenticated');
+        console.log('req body = ',req.body);
+        currentUserName = req.body.username;
+        UserModel.User.findOne({username: currentUserName}, (error, foundUser) => {
+          if(error){
+            console.log(error);
+          }
+          else{
+            console.log(foundUser);
+            res.redirect("/");
+          }
+        });
+      });
+    }
+  });
+
+});
+
+app.get("/logout", function(req, res){
+  req.logout();
+  currentUserName = "";
+  res.redirect("/");
 });
 
 app.get("/qualification", (req,res) => {
@@ -69,12 +151,6 @@ app.get("/qualification/new-qualification", (req, res) => {
 
 app.post("/qualification/new-qualification", (req,res) => {
   console.log(req.body);
-  console.log("----------");
-  console.log("qualificationName: " + req.body.qualificationName);
-  console.log("----------");
-  console.log("gradeList: " + req.body.gradeList);
-  console.log("----------");
-  console.log(req.body.maxScore);
   res.redirect("/qualification");
 });
 
