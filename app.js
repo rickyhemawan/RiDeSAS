@@ -13,7 +13,6 @@ const passport = require('passport');
 const passportLocalMongoose = require("passport-local-mongoose");
 
 
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -40,6 +39,7 @@ mongoose.set("useCreateIndex", true);
 
 // Models
 const UserModel = require(__dirname + '/models/user');
+const Qualification = require(__dirname + '/models/qualification');
 
 // Global Variables
 let currentUserName = "";
@@ -59,11 +59,13 @@ app.get("/", (req,res) => {
         }
 
         if(foundUser.kind === "UniAdmin"){
+          // TODO: create uniAdmin Front End
           console.log("uni admin");
           return;
         }
 
         if(foundUser.kind === "Applicant"){
+          // TODO: create applicant Front End
           console.log("uni admin");
           return;
         }
@@ -151,6 +153,24 @@ app.get("/qualification/new-qualification", (req, res) => {
 
 app.post("/qualification/new-qualification", (req,res) => {
   console.log(req.body);
+  const qualification = new Qualification({
+    qualificationName: req.body.qualificationName,
+    minimumScore: req.body.minScore,
+    maximumScore: req.body.maxScore,
+    resultCalcDescription: req.body.calcDescription,
+    gradeList: req.body.gradeList,
+  });
+
+  qualification.save((err) => {
+    if(err){
+      console.log("Error while saving!", err);
+    }
+    else{
+      console.log("Success Saving!");
+
+    }
+  });
+
   res.redirect("/qualification");
 });
 
