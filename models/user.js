@@ -50,7 +50,10 @@ const applicantSchema = new Schema({
 
 const Applicant = User.discriminator('Applicant', applicantSchema);
 
-const UniAdmin = User.discriminator('UniAdmin', new Schema({}, options));
+const UniAdmin = User.discriminator('UniAdmin', new Schema({ universityID: {
+  type: Schema.Types.ObjectId,
+  ref: 'University',
+}}, options));
 const SasAdmin = User.discriminator('SasAdmin', new Schema({}, options));
 
 module.exports = {

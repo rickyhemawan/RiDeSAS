@@ -78,3 +78,8 @@ textarea {
 .badge-pill{
   margin: 5px;
 }
+
+.stretching-content{
+  display: flex;
+  justify-content: space-between;
+}

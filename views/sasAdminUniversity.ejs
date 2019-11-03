@@ -1,4 +1,25 @@
 <%- include("sas_admin_partials/header") %>
-  <h1>University</h1>
-  <p><a href="/university/new-university">New University</a></p>
+  <div class="jumbotron sized-box">
+    <h1>University</h1>
+    <p>The SAS Admin can add or edit an existing university by entering the university name. Other than that, The SAS Admin is capable of adding admins to the selected University. </p>
+    <p><a class="btn btn-primary btn-lg" href="/universities/new-university" role="button">Add New University</a></p>
+  </div>
+
+  <div class="row">
+  <% universities.forEach((e)=>{ %>
+    <div class="col-sm-6 col-md-4">
+      <div class="thumbnail">
+        <div class="caption">
+          <h3><b><%= e.universityName %></b></h3>
+          <hr/>
+          <p>
+            <a href="/universities/<%=e._id %>" class="btn btn-primary" role="button">Edit University</a>
+            <a href="/universities/<%=e._id %>/add-admin" class="btn btn-default" role="button">+ |  Add Admin</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+  </div>
+
 <%- include("sas_admin_partials/footer") %>

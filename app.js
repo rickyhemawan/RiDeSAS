@@ -32,65 +32,60 @@ app.use(passport.session());
 
 mongoose.connect("mongodb://localhost:27017/rideSasDB", {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 
 mongoose.set("useCreateIndex", true);
 
 // Models
-const UserModel = require(__dirname + '/models/user');
+const { User, UniAdmin, Applicant, SasAdmin } = require(__dirname + '/models/user');
 const Qualification = require(__dirname + '/models/qualification');
-
+const University = require(__dirname + '/models/university');
 // Global Variables
 let currentUserName = "";
 const nonAuthPartials = "partials";
 const sasAdminPartials = "sas_admin_partials";
 const userPartials = "user_partials";
 
-// Routes
-app.get("/", (req,res) => {
+// Global Function
+function handleDifferentUser (req, {nonAuthUserCallback, sasAdminCallback, uniAdminCallback, applicantCallback}){
   if(req.isAuthenticated() && currentUserName !== ""){
-    UserModel.User.findOne({username: currentUserName}, (error, foundUser) => {
-      console.log(error ? error : foundUser);
+    User.findOne({username: currentUserName}, (error, foundUser) => {
       if(!error){
-        if(foundUser.kind === "SasAdmin"){
-          res.render("home", {partials: sasAdminPartials});
-          return;
-        }
-
-        if(foundUser.kind === "UniAdmin"){
-          // TODO: create uniAdmin Front End
-          console.log("uni admin");
-          return;
-        }
-
-        if(foundUser.kind === "Applicant"){
-          // TODO: create applicant Front End
-          console.log("uni admin");
-          return;
-        }
+        if(foundUser.kind === "SasAdmin") sasAdminCallback();
+        if(foundUser.kind === "UniAdmin") uniAdminCallback();
+        if(foundUser.kind === "Applicant") applicantCallback();
+      }
+      else{
+        console.log(error);
       }
     });
   }
   else{
-    res.render("home", {partials: nonAuthPartials});
+    nonAuthUserCallback();
   }
+}
 
-
-
+// Routes
+app.get("/", (req,res) => {
+  handleDifferentUser(req,{
+    nonAuthUserCallback: () => res.render("home", {partials: nonAuthPartials}),
+    sasAdminCallback: () => res.render("home", {partials: sasAdminPartials}),
+  });
 });
 
 app.get("/register", (req, res) => res.render("register"));
 
 app.post("/register", (req, res) => {
   console.log(req.body);
-  const sasAdmin = new UserModel.SasAdmin({
+  const sasAdmin = new SasAdmin({
     username: req.body.username,
     name: req.body.name,
     email: req.body.email,
   });
 
-  UserModel.SasAdmin.register(sasAdmin, req.body.password, (err) => {
+  SasAdmin.register(sasAdmin, req.body.password, (err) => {
     if(err){
       console.log('Error while registering!', err);
     }else{
@@ -107,7 +102,7 @@ app.get("/login", (req, res) => {
 
 app.post("/login", (req, res) => {
   console.log(req.body);
-  const user = new UserModel.User({
+  const user = new User({
     username: req.body.username,
     password: req.body.password,
   });
@@ -118,7 +113,7 @@ app.post("/login", (req, res) => {
         console.log('user is authenticated');
         console.log('req body = ',req.body);
         currentUserName = req.body.username;
-        UserModel.User.findOne({username: currentUserName}, (error, foundUser) => {
+        User.findOne({username: currentUserName}, (error, foundUser) => {
           if(error){
             console.log(error);
           }
@@ -139,43 +134,146 @@ app.get("/logout", function(req, res){
   res.redirect("/");
 });
 
-app.get("/qualification", (req,res) => {
-  res.render("sasAdminQualification");
-});
+app.get("/qualifications", (req,res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      Qualification.find((err, foundQualifications) => {
+        res.render("sasAdminQualification", {qualifications: foundQualifications});
 
-app.get("/university", (req,res) => {
-  res.render("sasAdminUniversity");
-
-});
-app.get("/qualification/new-qualification", (req, res) => {
-  res.render("sasAdminNewQualification");
-});
-
-app.post("/qualification/new-qualification", (req,res) => {
-  console.log(req.body);
-  const qualification = new Qualification({
-    qualificationName: req.body.qualificationName,
-    minimumScore: req.body.minScore,
-    maximumScore: req.body.maxScore,
-    resultCalcDescription: req.body.calcDescription,
-    gradeList: req.body.gradeList,
-  });
-
-  qualification.save((err) => {
-    if(err){
-      console.log("Error while saving!", err);
-    }
-    else{
-      console.log("Success Saving!");
-
+      });
     }
   });
 
-  res.redirect("/qualification");
 });
 
-app.get("/university/new-university", (req, res) => {
-  res.render("sasAdminNewUniversity");
+app.get("/qualifications/new-qualification", (req, res) => {
+  handleDifferentUser(req,{
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => res.render("sasAdminNewQualification"),
+  });
+
+});
+
+app.post("/qualifications/new-qualification", (req,res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      console.log(req.body);
+      const qualification = new Qualification({
+        qualificationName: req.body.qualificationName,
+        minimumScore: req.body.minScore,
+        maximumScore: req.body.maxScore,
+        resultCalcDescription: req.body.calcDescription,
+        gradeList: req.body.gradeList,
+      });
+
+      qualification.save((err) => {
+        if(err){
+          console.log("Error while saving!", err);
+        }
+        else{
+          console.log("Success Saving!");
+
+        }
+      });
+
+      res.redirect("/qualifications");
+    }
+  });
+
+});
+
+app.get("/qualifications/:id", (req, res) => {
+  handleDifferentUser(req,{
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      Qualification.findById(req.params.id, (err, foundQualification) => {
+        console.log(foundQualification);
+        res.render("sasAdminEditQualification", {qualification: foundQualification});
+      });
+    }
+  });
+});
+
+app.post("/qualifications/:id", (req, res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      Qualification.findByIdAndUpdate(req.params.id, req.body, (err, foundQualification) => {
+        console.log(err ? err : foundQualification);
+        res.redirect("/qualifications");
+      });
+    }
+  });
+
+});
+
+app.delete("/qualifications/:id", (req, res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      console.log('delete said: ',req.params.id);
+      Qualification.findByIdAndRemove(req.params.id, (err, foundQualification) => {
+        console.log(err ? err : "delete success");
+        res.send(err ? err : foundQualification);
+      });
+    }
+  });
+
+
+});
+
+app.get("/universities", (req,res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      University.find((err, found) => {
+        res.render("sasAdminUniversity", {universities: found});
+      });
+    }
+  });
+
+});
+
+app.get("/universities/new-university", (req, res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      res.render("sasAdminNewUniversity");
+    }
+  });
+
+});
+
+app.post("/universities/new-university", (req, res) => {
+  handleDifferentUser(req, {
+    nonAuthUserCallback: () => res.redirect("/"),
+    sasAdminCallback: () => {
+      console.log(req.body);
+      const university = new University({
+        universityName: req.body.universityName
+      });
+      university.save((err) => {
+        if(err){
+          console.log(err);
+        }
+        else{
+          console.log("university added, now adding admin");
+          const uniAdmin = new UniAdmin({
+            username: req.body.username,
+            password: req.body.password,
+            name: req.body.name,
+            email: req.body.emal,
+            universityID: university._id,
+          });
+          uniAdmin.save((err) => console.log(err ? err : "Success adding uni admin"));
+        }
+      });
+      res.redirect("/universities");
+    }
+  });
+
 });
 
 
