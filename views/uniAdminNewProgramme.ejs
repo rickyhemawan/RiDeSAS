@@ -1,0 +1,23 @@
+<%- include("uni_admin_partials/header") %>
+
+<form id="register-new-admin" class="form-signin" action="/programmes/<%=universityID%>/add-programme" method="post" >
+  <h1 class="main-title">Add Programme</h1>
+  <hr/>
+
+  <label class="sized-box">Programme Name</label>
+  <input type="text" class="form-control" placeholder="Input name" name="programmeName">
+
+  <label class="sized-box">Programme Description</label>
+  <textarea class="form-control bottom-form" placeholder="Input description" name="description"></textarea>
+
+
+  <label class="sized-box">Programme Closing Date</label>
+  <input type="datetime-local" class="form-control bottom-form" name="closeDate" value="2020-08-19T13:45:00">
+  <input type="hidden" name="universityID" value="<%= universityID %>" />
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Programme</button>
+</form>
+
+
+
+<%- include("uni_admin_partials/footer") %>

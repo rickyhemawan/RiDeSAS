@@ -1,0 +1,31 @@
+<%- include("sas_admin_partials/header") %>
+
+<form id="register-new-admin" class="form-signin" action="/universities/<%=university._id%>/new-admin" method="post" >
+  <h1 class="main-title"><%= university.universityName %></h1>
+  <hr/>
+  <h2>New University Admin</h2>
+
+  <label class="sized-box" for="username">Username</label>
+  <input id="username" type="username" class="form-control" name="username">
+
+  <label class="sized-box" for="password">Password</label>
+  <input id="password" type="password" class="form-control" name="password">
+
+  <label class="sized-box" for="confirmPassword">Re Enter Password</label>
+  <input id="confirmPassword" type="password" class="form-control" name="confirmPassword">
+
+  <label class="sized-box" for="email">Email</label>
+  <input id="email" type="email" class="form-control" name="email">
+
+  <label class="sized-box" for="name">University Admin Name</label>
+  <input id="name" type="text" class="form-control bottom-form" name="name">
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Admin</button>
+</form>
+
+<input type="hidden" id="universityID" value="<%= university._id %>" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/sasAdminNewAdmin.js" charset="utf-8"></script>
+
+<%- include("sas_admin_partials/footer") %>

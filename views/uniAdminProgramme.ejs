@@ -1,0 +1,31 @@
+<%- include("uni_admin_partials/header") %>
+  <div class="jumbotron sized-box">
+    <h1><%= university.universityName %> Programme</h1>
+    <p><%= university.universityName %> Admin is capable of creating and updating programme(s)</p>
+    <p><a class="btn btn-primary btn-lg" href="/programmes/<%= university._id %>/add-programme" role="button">Add New Programme</a></p>
+  </div>
+
+  <div class="row">
+  <% university.programmes.forEach((e)=>{ %>
+    <div class="col-sm-12 col-md-6">
+      <div class="thumbnail">
+        <div class="caption">
+          <h3><b><%= e.programmeName %></b></h3>
+          <h4><%= e.description %></h4>
+          <hr/>
+          <h4><b>Closing Date</b></h4>
+          <h5><%= e.closingDate %></h5>
+          <hr/>
+          <h4>Number of applications : <%= e.applications.length %></h4>
+          <hr/>
+          <p>
+            <a href="#" class="btn btn-primary" role="button">Edit Programme</a>
+            <a href="#" class="btn btn-info" role="button">Show Applications</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+  </div>
+
+<%- include("uni_admin_partials/footer") %>

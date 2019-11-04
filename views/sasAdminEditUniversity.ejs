@@ -1,0 +1,14 @@
+<%- include("sas_admin_partials/header") %>
+
+<form id="edit-university" class="form-signin" action="/universities/<%=university._id%>/edit-university" method="post" >
+  <h1 class="main-title">Update University</h1>
+  <label class="sized-box">University Name</label>
+  <input name="universityName" type="text" class="form-control bottom-form" value="<%=university.universityName%>">
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Edit University</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/sasAdminNewUniversity.js" charset="utf-8"></script>
+
+<%- include("sas_admin_partials/footer") %>

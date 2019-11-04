@@ -5,6 +5,7 @@ const { User } = require('../models/user');
 const nonAuthPartials = "partials";
 const sasAdminPartials = "sas_admin_partials";
 const userPartials = "user_partials";
+const uniAdminPartials = "uni_admin_partials";
 let currentUserName = "";
 
 function handleDifferentUser(req, {nonAuthUserCallback, sasAdminCallback, uniAdminCallback, applicantCallback}) {
@@ -30,6 +31,9 @@ function setCurrentUsername(name){
   console.log();
   this.currentUserName = name;
 }
+function getCurrentUserName(){
+  return this.currentUserName;
+}
 
 module.exports = {
   handleDifferentUser,
@@ -37,4 +41,6 @@ module.exports = {
   sasAdminPartials,
   userPartials,
   setCurrentUsername,
+  uniAdminPartials,
+  getCurrentUserName,
 };
