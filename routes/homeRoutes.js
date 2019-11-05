@@ -3,6 +3,7 @@
 const router = require('express').Router();
 const { HomeController } = require('../controllers');
 
+router.get("/", HomeController.viewHome);
 router.get("/register", HomeController.viewRegisterForm);
 router.post("/register", HomeController.createNewApplicant);
 router.get("/login", HomeController.viewLoginForm);

@@ -2,9 +2,41 @@
 
 const { User, UniAdmin, Applicant, SasAdmin } = require('../models/user');
 const passport = require('passport');
-const { setCurrentUsername } = require('../helpers/handleAuthType');
+const University  = require('../models/university');
+const {
+  handleDifferentUser,
+  nonAuthPartials,
+  sasAdminPartials,
+  userPartials,
+  uniAdminPartials,
+  setCurrentUsername,
+} = require('../helpers/handleAuthType');
 
 module.exports = {
+  viewHome(req,res){
+    handleDifferentUser(req,{
+      nonAuthUserCallback: () => {
+        University.find((err, found) => {
+          if(err) console.log(err);
+          else{
+            console.log(found);
+            res.render("programmeListHome", {partials: nonAuthPartials, universities: found});
+          }
+        });
+      },
+      sasAdminCallback: () => res.render("home", {partials: sasAdminPartials}),
+      uniAdminCallback: () => res.render("home", {partials: uniAdminPartials}),
+      applicantCallback: () => {
+        University.find((err, found) => {
+          if(err) console.log(err);
+          else{
+            console.log(found);
+            res.render("programmeListHome", {partials: userPartials, universities: found});
+          }
+        });
+      },
+    });
+  },
   viewRegisterForm(req, res){
     res.render("register");
   },

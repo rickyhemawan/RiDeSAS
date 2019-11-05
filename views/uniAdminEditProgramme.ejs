@@ -1,0 +1,24 @@
+<%- include("uni_admin_partials/header") %>
+
+<form id="register-new-admin" class="form-signin" action="/programmes/<%=university._id%>/edit-programme/<%= programme._id%>" method="post" >
+  <h1 class="main-title">Edit Programme</h1>
+  <hr/>
+
+  <label class="sized-box">Programme Name</label>
+  <input type="text" class="form-control" placeholder="Input name" name="programmeName" value="<%= programme.programmeName %>">
+
+  <label class="sized-box">Programme Description</label>
+  <textarea class="form-control bottom-form" placeholder="Input description" name="description" ><%= programme.description %></textarea>
+
+  <label class="sized-box">Programme Closing Date</label>
+  <%- console.log(programme.closingDate); %>
+  <input type="datetime-local" class="form-control bottom-form" name="closeDate" value="<%= programme.closingDate.toISOString().substring(0, 16); %>">
+  <input type="hidden" name="universityID" value="<%= university._id %>" />
+  <input type="hidden" name="programmeID" value="<%= programme._id %>" />
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Save Changes</button>
+</form>
+
+
+
+<%- include("uni_admin_partials/footer") %>

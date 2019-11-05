@@ -83,3 +83,7 @@ textarea {
   display: flex;
   justify-content: space-between;
 }
+
+.bottom-form-small{
+  text-align: right;
+}

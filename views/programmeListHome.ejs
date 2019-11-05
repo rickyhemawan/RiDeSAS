@@ -1,0 +1,31 @@
+<%- include(partials + "/header") %>
+<div class="jumbotron sized-box">
+  <h1>RiDe</h1>
+  <h2>Apply Programmes easily with Ricky Delia Student Application System</h2>
+  <hr/>
+  <p>Add your qualification once, and you are ready to apply for any programs! So what are you waiting? <a href="/register">Register now</a>, its free! </p>
+</div>
+
+<div class="row">
+<% universities.forEach((u) => { %>
+  <% u.programmes.forEach((p) => { %>
+    <div class="col-sm-12 col-md-6">
+      <div class="thumbnail">
+        <div class="caption">
+          <h3><b><%= p.programmeName %></b></h3>
+          <h4><%= p.description %></h4>
+          <hr/>
+          <h4><b>Closing Date</b></h4>
+          <h5><%= p.closingDate %></h5>
+          <hr/>
+          <p class="bottom-form-small">
+            <a href="#" class="btn btn-primary" role="button">Apply now!</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+<% });%>
+</div>
+
+<%- include(partials + "/footer") %>
