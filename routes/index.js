@@ -17,8 +17,6 @@ const programmeRoutes = require('./programmeRoutes');
 const applicationRoutes = require('./applicationRoutes');
 
 router.get("/", (req,res) => {
-  console.log(uniAdminPartials);
-  console.log(nonAuthPartials);
   handleDifferentUser(req,{
     nonAuthUserCallback: () => res.render("home", {partials: nonAuthPartials}),
     sasAdminCallback: () => res.render("home", {partials: sasAdminPartials}),

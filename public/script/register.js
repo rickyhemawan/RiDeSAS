@@ -20,6 +20,10 @@ $("#register-new-user").on("submit", function(e) {
         password: $("#password").val(),
         name: $("#name").val(),
         email: $("#email").val(),
+        idType: $("#idType").val(),
+        idNumber: $("#idNumber").val(),
+        mobileNo: $("#mobileNo").val(),
+        dateOfBirth: $("#dateOfBirth").val(),
       },
       success: function(data){
         window.location = "/register";

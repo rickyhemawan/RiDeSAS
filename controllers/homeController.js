@@ -10,19 +10,23 @@ module.exports = {
   },
   createNewApplicant(req, res){
     console.log(req.body);
-    // TODO change this to applicant later
-    const sasAdmin = new SasAdmin({
+    console.log("createNewApplicant");
+    const applicant = new Applicant({
       username: req.body.username,
       name: req.body.name,
       email: req.body.email,
+      idType: req.body.idType,
+      idNumber: req.body.idNumber,
+      mobileNo: req.body.mobileNo,
+      dateOfBirth: req.body.dateOfBirth,
     });
 
-    SasAdmin.register(sasAdmin, req.body.password, (err) => {
+    Applicant.register(applicant, req.body.password, (err) => {
       if(err){
         console.log('Error while registering!', err);
       }else{
         console.log("user registered!");
-        res.redirect('/register');
+        res.redirect('/login');
       }
     });
   },

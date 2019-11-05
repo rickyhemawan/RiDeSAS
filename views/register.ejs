@@ -1,45 +1,43 @@
-<%- include('partials/header') %>
-<div class="container mt-5">
+<%- include("partials/header") %>
+
+<form id="register-new-user" class="form-signin" action="/register" method="post">
   <h1>Register</h1>
+  <hr />
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
+  <label class="sized-box" for="username">Username</label>
+  <input id="username" type="username" class="form-control" name="username">
 
-          <!-- Makes POST request to /register route -->
-          <form id="register-new-user" action="/register" method="POST">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input id="username" type="username" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input id="password" type="password" class="form-control" name="password">
-            </div>
-            <div class="form-group">
-              <label for="confirmPassword">Re Enter Password</label>
-              <input id="confirmPassword" type="password" class="form-control" name="confirmPassword">
-            </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input id="email" type="email" class="form-control" name="email">
-            </div>
-            <div class="form-group">
-              <label for="name">Your Name</label>
-              <input id="name" type="text" class="form-control" name="name">
-            </div>
-            <button type="submit" class="btn btn-dark">Register</button>
-          </form>
+  <label class="sized-box" for="password">Password</label>
+  <input id="password" type="password" class="form-control" name="password">
 
-        </div>
-      </div>
-    </div>
+  <label class="sized-box" for="confirmPassword">Re Enter Password</label>
+  <input id="confirmPassword" type="password" class="form-control" name="confirmPassword">
 
-  </div>
-</div>
+  <label class="sized-box" for="email">Email</label>
+  <input id="email" type="email" class="form-control" name="email">
+
+  <label class="sized-box" for="name">Applicant Name</label>
+  <input id="name" type="text" class="form-control" name="name">
+
+  <label class="sized-box" for="idType">ID Type</label>
+  <select class="form-control" id="idType">
+    <option>MyKad</option>
+    <option>Passport</option>
+  </select>
+
+  <label class="sized-box" for="idNumber">ID Number</label>
+  <input id="idNumber" type="text" class="form-control">
+  
+  <label class="sized-box" for="mobileNo">Mobile Number</label>
+  <input id="mobileNo" type="text" class="form-control">
+
+  <label class="sized-box" for="dateOfBirth">Date of Birth</label>
+  <input id="dateOfBirth" type="datetime-local" class="form-control bottom-form" value="2000-02-20T00:00:00">
+
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Register</button>
+</form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="/script/register.js" charset="utf-8"></script>
 
-<%- include('partials/footer') %>
+<%- include("partials/footer") %>
