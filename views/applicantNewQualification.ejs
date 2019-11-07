@@ -1,0 +1,23 @@
+<%- include("user_partials/header") %>
+<form id="register-new-admin" class="form-signin" action="#" method="post" >
+  <h1 class="main-title">New Qualification</h1>
+
+  <label class="sized-box" for="username">Username</label>
+  <input id="username" type="username" class="form-control" name="username">
+
+  <label class="sized-box" for="idType">ID Type</label>
+  <select class="form-control" id="idType">
+    <option>MyKad</option>
+    <option>Passport</option>
+  </select>
+
+  <label class="sized-box" for="email">Email</label>
+  <input id="email" type="email" class="form-control" name="email">
+
+  <label class="sized-box" for="name">University Admin Name</label>
+  <input id="name" type="text" class="form-control bottom-form" name="name">
+
+  <!-- <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Qualification</button> -->
+</form>
+
+<%- include("user_partials/footer") %>

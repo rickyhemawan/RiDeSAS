@@ -1,7 +1,8 @@
 // jshint esversion:6
 const Qualification = require('../models/qualification');
+const { User } = require('../models/user');
 const router = require('express').Router();
-const { handleDifferentUser, nonAuthPartials, sasAdminPartials, userPartials, } = require('../helpers/handleAuthType');
+const { handleDifferentUser, nonAuthPartials, sasAdminPartials, userPartials, getCurrentUserName } = require('../helpers/handleAuthType');
 
 module.exports = {
   showQualifications(req,res){
@@ -12,13 +13,22 @@ module.exports = {
           res.render("sasAdminQualification", {qualifications: foundQualifications});
 
         });
-      }
+      },
+      applicantCallback: () => {
+        User.findOne({username: getCurrentUserName()}, (err1, found) =>{
+          if(err1) console.log(err1);
+          else{
+            res.render("applicantQualification", {applicant : found});
+          }
+        });
+      },
     });
   },
   showQualificationForm(req, res){
     handleDifferentUser(req,{
       nonAuthUserCallback: () => res.redirect("/"),
       sasAdminCallback: () => res.render("sasAdminNewQualification"),
+      applicantCallback: () => res.render("applicantNewQualification"),
     });
   },
   addQualification(req,res){
