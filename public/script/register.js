@@ -26,7 +26,7 @@ $("#register-new-user").on("submit", function(e) {
         dateOfBirth: $("#dateOfBirth").val(),
       },
       success: function(data){
-        window.location = "/register";
+        window.location = "/login";
       }
     });
   }

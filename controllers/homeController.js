@@ -1,4 +1,4 @@
-// jshint esversion:6
+   // jshint esversion:6
 
 const { User, UniAdmin, Applicant, SasAdmin } = require('../models/user');
 const passport = require('passport');
@@ -59,6 +59,26 @@ module.exports = {
       }else{
         console.log("user registered!");
         res.redirect('/login');
+      }
+    });
+  },
+  viewSasAdminRegisterForm(req, res){
+    res.render("registerSasAdmin");
+  },
+  createNewSasAdmin(req, res){
+    console.log(req.body);
+    const sasAdmin = new SasAdmin({
+      username: req.body.username,
+      name: req.body.name,
+      email: req.body.email,
+    });
+
+    SasAdmin.register(sasAdmin, req.body.password, (err) => {
+      if(err){
+        console.log('Error while registering!', err);
+      }else{
+        console.log("user registered!");
+        res.redirect('/register');
       }
     });
   },
