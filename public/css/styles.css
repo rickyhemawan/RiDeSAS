@@ -87,3 +87,15 @@ textarea {
 .bottom-form-small{
   text-align: right;
 }
+
+.content{
+  margin: 60px 40px 20px;
+}
+
+.successful-style{
+  color: green;
+}
+
+.unsucessful-style{
+  color: red;
+}

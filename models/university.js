@@ -1,14 +1,19 @@
 // jshint esversion: 6
 
 const {model, Schema} = require('mongoose');
+const { NOT_REVIEWED } = require('../constants.js');
 
 const applicationProgramme = new Schema({
   applicationDate:{
     type: Date,
   },
   status: {
-    type: Boolean,
-    default: false,
+    type: String,
+    default: NOT_REVIEWED,
+  },
+  applicantId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 

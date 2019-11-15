@@ -21,6 +21,34 @@ const qualificationSchema = new Schema({
   }
 });
 
+const subjectResultSchema = new Schema({
+  subjectName : {
+    type: String,
+  },
+  grade : {
+    type: String,
+  },
+  score : {
+    type : Number,
+  }
+});
+
+const applicantQualificationSchema = new Schema({
+  qualification : {
+    type: qualificationSchema,
+  },
+  overallScore : {
+    type: Number,
+  },
+  subjectResults : {
+    type: [subjectResultSchema],
+  }
+
+});
+
 const Qualification = new mongoose.model('Qualification', qualificationSchema);
 
-module.exports = Qualification;
+module.exports = {
+  Qualification,
+  applicantQualificationSchema,
+};

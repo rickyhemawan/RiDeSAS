@@ -7,5 +7,8 @@ router.get("/:id/add-programme", ProgrammeController.showNewProgrammeForm);
 router.post("/:id/add-programme", ProgrammeController.addNewProgramme);
 router.get("/:id/edit-programme/:programmeID", ProgrammeController.showEditProgrammeForm);
 router.post("/:id/edit-programme/:programmeID", ProgrammeController.editProgramme);
+router.get("/:id/apply-for-programme/:programmeID", ProgrammeController.showApplyForProgrammeForm);
+router.post("/:id/apply-for-programme/:programmeID", ProgrammeController.applyForProgramme);
+router.get("/:id/show-applicants/:programmeID", ProgrammeController.showApplicants);
 
 module.exports = router;

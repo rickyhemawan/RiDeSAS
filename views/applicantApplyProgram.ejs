@@ -1,0 +1,19 @@
+<%- include("user_partials/header") %>
+<div class="jumbotron sized-box">
+  <h1><%= programme.programmeName %> - <%= university.universityName %></h1>
+  <hr/>
+  <h2>Open until</h2>
+  <p><%= programme.closingDate %></p>
+
+</div>
+<div class="content">
+  <h1 class="mt-5">Description</h1>
+  <p class="lead"><%= programme.description %></p>
+  <form action="/programmes/<%=university._id%>/apply-for-programme/<%=programme._id%>" method="post">
+    <p class="bottom-form-small">
+      <button type="submit" class="btn btn-primary btn-lg">Apply for programme</button>
+    </p>
+  </form>
+</div>
+
+<%- include("user_partials/footer") %>
