@@ -8,7 +8,7 @@ const userPartials = "user_partials";
 const uniAdminPartials = "uni_admin_partials";
 let currentUserName = "";
 
-function handleDifferentUser(req, {nonAuthUserCallback, sasAdminCallback, uniAdminCallback, applicantCallback}) {
+function handleDifferentUser(req, {nonAuthUserCallback  = ()=>{}, sasAdminCallback  = ()=>{}, uniAdminCallback  = ()=>{}, applicantCallback  = ()=>{}}) {
   console.log("handle diff user says currentUserName : ", this.currentUserName);
   if(req.isAuthenticated() && this.currentUserName !== ""){
     User.findOne({username: this.currentUserName}, (error, foundUser) => {

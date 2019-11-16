@@ -5,6 +5,7 @@ const { handleDifferentUser, nonAuthPartials, sasAdminPartials, userPartials, ge
 const { User } = require("../models/user");
 const University  = require("../models/university");
 const { Schema } = require("mongoose");
+const { NOT_REVIEWED, SUCCESSFUL, UNSUCESSFUL } = require('../constants.js');
 
 module.exports = {
   showProgrammes(req, res){
@@ -104,6 +105,115 @@ module.exports = {
           }
         });
         res.redirect("/programmes");
+      }
+    });
+  },
+  showApplyForProgrammeForm(req, res){
+    handleDifferentUser(req, {
+      nonAuthUserCallback: () => res.redirect('/login'),
+      applicantCallback: () => {
+
+        User.findOne({username: getCurrentUserName()}, (err1, found) =>{
+          if(err1) console.log(err1);
+          else{
+            if(found.qualifications.length === 0) res.redirect("/qualifications");
+            else if(found.qualifications[0].subjectResults.length === 0) res.redirect("/qualifications");
+            else {
+              University.findById(req.params.id, (err, found) => {
+                if(err) console.log(err);
+                else{
+                  console.log("found : ", found);
+                  console.log("found programme = ", found.programmes.find((k) => k.equals(req.params.programmeID)));
+                  res.render("applicantApplyProgram", {
+                    university: found,
+                    programme: found.programmes.find((k) => k.equals(req.params.programmeID)),
+                  });
+                }
+              });
+            }
+          }
+        });
+      }
+    });
+  },
+  applyForProgramme(req, res){
+    handleDifferentUser(req, {
+      nonAuthUserCallback: () => res.redirect('/'),
+      applicantCallback: () => {
+        University.findById(req.params.id, (err, uniFound) => {
+          if(err) console.log(err);
+          else{
+            console.log("uniFound : ", uniFound);
+            console.log("uniFound programme = ", uniFound.programmes.find((k) => k.equals(req.params.programmeID)));
+            User.findOne({ username: getCurrentUserName()}, (err1, userFound) => {
+              if (err1) console.log(err1);
+              else {
+                uniFound.programmes.find((k) => k.equals(req.params.programmeID)).applications.push({
+                  applicationDate: new Date(),
+                  status: NOT_REVIEWED,
+                  applicantId: userFound._id,
+                });
+                console.log("not reviewed: ", NOT_REVIEWED);
+                uniFound.save((err) => {
+                  console.log(err ? err : "success");
+                  res.render("applicantApplicationSent", {
+                    programme: uniFound.programmes.find((k) => k.equals(req.params.programmeID)),
+                    university: uniFound,
+                    applicant: userFound,
+                  });
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+  showApplicants(req, res){
+    handleDifferentUser(req, {
+      nonAuthUserCallback: () => res.redirect('/'),
+      uniAdminCallback: () => {
+        University.findById(req.params.id, (err, uniFound) => {
+          if(err) console.log(err);
+          else{
+            let applications = [];
+            const applicationsList = uniFound.programmes.find((k) => k.equals(req.params.programmeID)).applications;
+            if(applicationsList.length === 0){
+              res.render("uniAdminApplication", {
+                programme: uniFound.programmes.find((k) => k.equals(req.params.programmeID)),
+                university: uniFound,
+                applications: applications,
+                SUCCESSFUL: SUCCESSFUL,
+                UNSUCESSFUL: UNSUCESSFUL,
+                NOT_REVIEWED: NOT_REVIEWED,
+              });
+              return;
+            }
+            applicationsList.forEach((e) => {
+              console.log("applicantId: ", e.applicantId);
+              User.findById(e.applicantId, (err, userFound) => {
+                if(err) console.log(err);
+                else{
+                  console.log(userFound);
+                  applications.push(
+                    {user: userFound, otherProperty: e}
+                  );
+                  console.log("applications: ", applications);
+                  if(applications.length === applicationsList.length){
+                    res.render("uniAdminApplication", {
+                      programme: uniFound.programmes.find((k) => k.equals(req.params.programmeID)),
+                      university: uniFound,
+                      applications: applications,
+                      SUCCESSFUL: SUCCESSFUL,
+                      UNSUCESSFUL: UNSUCESSFUL,
+                      NOT_REVIEWED: NOT_REVIEWED,
+                    });
+                  }
+                }
+              });
+            });
+          }
+        });
       }
     });
   },

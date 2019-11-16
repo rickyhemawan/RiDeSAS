@@ -1,23 +1,31 @@
 <%- include("user_partials/header") %>
-<form id="register-new-admin" class="form-signin" action="#" method="post" >
-  <h1 class="main-title">New Qualification</h1>
+<div class="jumbotron sized-box">
+  <h1 class="main-title">Select Qualification</h1>
+  <hr/>
+  <p>Select the qualification type to add or <a href="#">request new qualification type</a></p>
+</div>
 
-  <label class="sized-box" for="username">Username</label>
-  <input id="username" type="username" class="form-control" name="username">
+<div class="row">
+<% qualifications.forEach((e)=>{ %>
+  <div class="col-sm-12 col-md-6">
+    <div class="thumbnail">
+      <div class="caption">
+        <form action="/qualifications/new-qualification" method="post">
+        <h3><b><%= e.qualificationName %></b></h3>
+        <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
+        <hr/>
+        <p><%= e.resultCalcDescription %></p>
+        <h4><b>Grade List : </b><%= e.gradeList %></h4>
+        <input type="hidden" name="qualification" value="<%= JSON.stringify(e) %>" />
+        <div class="bottom-form-small">
+          <button type="submit" class="btn btn-primary ">Create Qualification</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<% }); %>
+</div>
 
-  <label class="sized-box" for="idType">ID Type</label>
-  <select class="form-control" id="idType">
-    <option>MyKad</option>
-    <option>Passport</option>
-  </select>
-
-  <label class="sized-box" for="email">Email</label>
-  <input id="email" type="email" class="form-control" name="email">
-
-  <label class="sized-box" for="name">University Admin Name</label>
-  <input id="name" type="text" class="form-control bottom-form" name="name">
-
-  <!-- <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Qualification</button> -->
-</form>
 
 <%- include("user_partials/footer") %>

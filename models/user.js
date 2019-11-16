@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passport = require('passport');
 const passportLocalMongoose = require("passport-local-mongoose");
+const { applicantQualificationSchema } = require("./qualification");
 
 
 options = {discriminatorKey: 'kind'};
@@ -47,6 +48,9 @@ const applicantSchema = new Schema({
     type: Date,
     required: [true, 'Date of birth required'],
   },
+  qualifications: {
+    type: [applicantQualificationSchema],
+  }
 }, options);
 
 const Applicant = User.discriminator('Applicant', applicantSchema);

@@ -1,0 +1,57 @@
+<%- include("user_partials/header") %>
+<h1 class="main-title"> Applicant Edit Qualification </h1>
+<p class="bottom-form-small">
+  <button id="btn_delete" class="btn btn-danger" href="#">- | Delete Qualification
+  </button>
+</p>
+<% const qualification = applicantQualification.qualification %>
+<div class="thumbnail">
+  <div class="caption">
+    <h3><b><%= qualification.qualificationName %></b></h3>
+    <h4>Minimum Score: <%= qualification.minimumScore %>, Maximum Score: <%= qualification.maximumScore %></h4>
+    <hr/>
+    <p><b>Description: </b><%= qualification.resultCalcDescription %></p>
+  </div>
+</div>
+
+<% if(applicantQualification.subjectResults.length !== 0){ %>
+  <h1>Subject for this qualification</h1>
+<% } %>
+
+<p class="bottom-form-small">
+  <a id="btn_add" class="btn btn-success" href="/qualifications/<%= applicantQualification._id %>/add-subject">+ | Add Subject</a>
+</p>
+
+<% if(applicantQualification.subjectResults.length === 0){ %>
+  <div class="thumbnail caption">
+    <h3><b>You have no subject submitted!</b></h3>
+  </div>
+
+<% } else { %>
+  <div class="row" id="subject-list">
+  <% applicantQualification.subjectResults.forEach((e)=>{ %>
+    <div class="col-sm-12 col-md-6" >
+      <div class="thumbnail">
+        <div class="caption">
+          <h3><b><%= e.subjectName %></b></h3>
+          <hr/>
+          <h4><b>Grade : </b><%= e.grade %></h4>
+          <h4><b>Score : </b><%= e.score %></h4>
+          <p class="bottom-form-small">
+            <button class="btn btn-danger" id="<%= e._id %>">- | Delete Subject </button>
+          </p>
+        </div>
+      </div>
+    </div>
+  <% }); %>
+  </div>
+<% } %>
+<input type="hidden" id="qualificationId" value="<%= applicantQualification._id %>" />
+<input type="hidden" id="subjectResults" value="<%= JSON.stringify(applicantQualification.subjectResults)%>" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/applicantEditQualification.js" charset="utf-8"></script>
+
+
+
+<%- include("user_partials/footer") %>

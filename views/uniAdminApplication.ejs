@@ -1,8 +1,38 @@
 <%- include("uni_admin_partials/header") %>
   <div class="jumbotron sized-box">
-    <h1>Application</h1>
-    <p>TODO</p>
-    <p><a class="btn btn-primary btn-lg" href="#" role="button">Add New Application</a></p>
+    <h1><%= university.universityName %>'s - <%= programme.programmeName %></h1>
+  </div>
+
+  <div class="row">
+  <% applications.forEach((e, i, arr)=>{ %>
+    <div class="col-sm-12 col-md-6">
+      <div class="thumbnail">
+        <div class="caption">
+          <h3><b>Applicant no: #<%= i+1 %></b></h3>
+          <hr/>
+          <h4><b>From : </b><%= e.user.name %></h4>
+          <h4><b>Email Address: </b><%= e.user.email %></h4>
+          <h4><b>Status: </b>
+            <% if(e.otherProperty.status === NOT_REVIEWED){ %>
+              <span><%= e.otherProperty.status %></span>
+            <% } else if(e.otherProperty.status === SUCCESSFUL){ %>
+              <span class="successful-style"><b>Successful</b></span>
+            <% } else { %>
+              <span class="unsuccessful-style" ><b>Unsuccessful</b></span>
+            <% } %>
+          </h4>
+          <hr/>
+
+          <% console.log(NOT_REVIEWED === e.otherProperty.status); %>
+          <% if(e.otherProperty.status === NOT_REVIEWED) { %>
+            <div class="bottom-form-small"><a class="btn btn-primary"><b>Review application</b></a></div>
+          <% } else { %>
+            <div class="bottom-form-small"><a class="btn btn-secondary"><b>Show Details</b></a></div>
+          <% } %>
+        </div>
+      </div>
+    </div>
+  <% }); %>
   </div>
 
 <%- include("uni_admin_partials/footer") %>

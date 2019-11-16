@@ -1,0 +1,23 @@
+<%- include("user_partials/header") %>
+
+<form class="form-signin" action="/qualifications/<%= applicantQualification._id %>/add-subject" method="post">
+  <h1>Add New Subject to <%= applicantQualification.qualification.qualificationName %></h1>
+  <hr />
+
+  <label class="sized-box" for="subject-name">Subject Name</label>
+  <input type="text" class="form-control" name="subjectName">
+
+  <label class="sized-box" for="grade">Grade</label>
+  <select class="form-control" name="grade">
+    <% applicantQualification.qualification.gradeList.forEach((e) => { %>
+    <option><%= e %></option>
+    <% }); %>
+  </select>
+
+  <label class="sized-box" for="score">Score</label>
+  <input type="number" class="form-control bottom-form" name="score">
+
+  <button type="submit" class="btn btn-lg btn-success btn-block bottom-form">Add Subject</button>
+</form>
+
+<%- include("user_partials/footer") %>

@@ -1,9 +1,28 @@
 <%- include("user_partials/header") %>
 <div class="jumbotron sized-box">
-  <h1>Qualifications</h1>
-  <h2><%= applicant.name %>'s qualifications</h2>
+  <h1><%= applicant.name %>'s Qualifications</h1>
   <p>Manage your qualification here! You need at least one qualification with its grades to be able to apply for our programmes</p>
   <p><a class="btn btn-primary btn-lg" href="/qualifications/new-qualification" role="button">Add New Qualification</a></p>
+</div>
+
+<div class="row">
+<% applicant.qualifications.forEach((f)=>{ %>
+  <% const e = f.qualification %>
+  <div class="col-sm-12 col-md-6">
+    <div class="thumbnail">
+      <div class="caption">
+        <h3><b><%= e.qualificationName %></b></h3>
+        <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
+        <hr/>
+        <p><b>Description: </b><%= e.resultCalcDescription %></p>
+        <hr/>
+        <h4><b><%= f.subjectResults.length %></b> Subject(s) has been submitted.</h4>
+        <h4><b>Average Score : </b><%= 0.0 %></h4>
+        <p class="bottom-form-small"><a href="/qualifications/<%=f._id %>" class="btn btn-primary" role="button">View Qualification</a></p>
+      </div>
+    </div>
+  </div>
+<% }); %>
 </div>
 
 <%- include("user_partials/footer") %>
