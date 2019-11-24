@@ -19,7 +19,7 @@ module.exports = {
         University.find((err, found) => {
           if(err) console.log(err);
           else{
-            console.log(found);
+            // console.log(found);
             res.render("programmeListHome", {partials: nonAuthPartials, universities: found});
           }
         });
@@ -30,7 +30,7 @@ module.exports = {
         University.find((err, found) => {
           if(err) console.log(err);
           else{
-            console.log(found);
+            // console.log(found);
             res.render("programmeListHome", {partials: userPartials, universities: found});
           }
         });
@@ -86,7 +86,7 @@ module.exports = {
     res.render("login");
   },
   userLogin(req, res){
-    console.log(req.body);
+    // console.log(req.body);
     const user = new User({
       username: req.body.username,
       password: req.body.password,
@@ -95,15 +95,15 @@ module.exports = {
       if(err) console.log(err);
       else{
         passport.authenticate("local")(req, res, () => {
-          console.log('user is authenticated');
-          console.log('req body = ',req.body);
+          // console.log('user is authenticated');
+          // console.log('req body = ',req.body);
           setCurrentUsername(req.body.username);
           User.findOne({username: currentUserName}, (error, foundUser) => {
             if(error){
               console.log(error);
             }
             else{
-              console.log(foundUser);
+              // console.log(foundUser);
               res.redirect("/");
             }
           });
