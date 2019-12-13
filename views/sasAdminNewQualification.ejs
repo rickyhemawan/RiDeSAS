@@ -26,7 +26,13 @@
   </div>
 
   <label class="sized-box">Result Calculation Description</label>
-  <textarea class="form-control bottom-form" placeholder="Input Description" id="calcDescription"></textarea>
+  <div class="badge-pill-container">
+    <select class="form-control" name="resultCalcDescription" id="resultCalcDescription">
+      <option>Average of</option>
+      <option>Sum of</option>
+    </select>
+    <input type="number" class="form-control bottom-form" placeholder="Score" id="resultCalcScore">
+  </div>
   <button type="submit" class="btn btn-lg btn-primary btn-block">Add New Qualification</button>
 </form>
 

@@ -16,6 +16,9 @@ const qualificationSchema = new Schema({
   resultCalcDescription : {
     type: String,
   },
+  resultCalcScore : {
+    type: Number,
+  },
   gradeList: {
     type: [String],
   }

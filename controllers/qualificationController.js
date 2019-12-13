@@ -63,6 +63,7 @@ module.exports = {
           minimumScore: req.body.minScore,
           maximumScore: req.body.maxScore,
           resultCalcDescription: req.body.calcDescription,
+          resultCalcScore: req.body.calcDescriptionScore,
           gradeList: req.body.gradeList,
         });
 
@@ -127,6 +128,7 @@ module.exports = {
       sasAdminCallback: () => {
         Qualification.findByIdAndUpdate(req.params.id, req.body, (err, foundQualification) => {
           console.log(err ? err : foundQualification);
+          console.log(req.body);
           res.redirect("/qualifications");
         });
       },

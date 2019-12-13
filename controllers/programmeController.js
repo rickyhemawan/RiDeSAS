@@ -217,4 +217,42 @@ module.exports = {
       }
     });
   },
+  reviewApplicant(req, res){
+    handleDifferentUser(req, {
+      uniAdminCallback: () => {
+        console.log("params id =====", req.params.id);
+        console.log("params programmeID =====", req.params.programmeID);
+        console.log("params applicationID =====", req.params.applicationID);
+        University.findById(req.params.id, (err, uniFound) => {
+          if(err) console.log(err);
+          else{
+            uniFound.programmes.forEach((programme) => {
+              console.log("loop executed");
+              if(programme._id.toString() === req.params.programmeID){
+                console.log("programme id found");
+                programme.applications.forEach((application) => {
+                  console.log("loop executed 2");
+                  if(application._id.toString() === req.params.applicationID){
+                    console.log("applicationID found");
+                    User.findById(application.applicantId, (err, userFound) => {
+                      if(err) console.log(err);
+                      else{
+                        console.log("User is founded", userFound);
+                        res.render("uniAdminReviewApplication", {
+                          programme: programme,
+                          application: application,
+                          applicant: userFound,
+                          universityID: req.params.id,
+                        });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
 };

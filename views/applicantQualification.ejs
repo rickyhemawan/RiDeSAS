@@ -14,10 +14,32 @@
         <h3><b><%= e.qualificationName %></b></h3>
         <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
         <hr/>
-        <p><b>Description: </b><%= e.resultCalcDescription %></p>
+        <p><b>Description: </b><%= e.resultCalcDescription %> <%= e.resultCalcScore %> subject(s)</p>
         <hr/>
         <h4><b><%= f.subjectResults.length %></b> Subject(s) has been submitted.</h4>
-        <h4><b>Average Score : </b><%= 0.0 %></h4>
+        <h4><b><%= e.resultCalcDescription.slice(0,-2) %></b>:
+          <% let x = 0%>
+          <% console.log("beforeSort =>", f.subjectResults); %>
+          <%f.subjectResults.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0)); %>
+          <% console.log("afterSort=>", f.subjectResults); %>
+          <% let diff = f.subjectResults.length - e.resultCalcScore%>
+          <% diff = diff < 0 ? 0 : diff%>
+          <% console.log("diff=>",diff); %>
+          <% if(diff !== 0) {%>
+            <%f.subjectResults.splice(f.subjectResults.length - diff, diff)%>
+          <%}%>
+          <% if(e.resultCalcDescription === "Average of"){%>
+            <% f.subjectResults.forEach((subject)=> { %>
+              <% x += subject.score %>
+            <% });%>
+            <% x = x / f.subjectResults.length%>
+          <% } else {%>
+            <% f.subjectResults.forEach((subject)=> { %>
+              <% x += subject.score %>
+            <% });%>
+          <%}%>
+          <%= x %>
+        </h4>
         <p class="bottom-form-small"><a href="/qualifications/<%=f._id %>" class="btn btn-primary" role="button">View Qualification</a></p>
       </div>
     </div>

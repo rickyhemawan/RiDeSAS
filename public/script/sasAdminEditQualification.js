@@ -48,7 +48,8 @@ $('#qualification-type-form').on('submit', function(e){
       qualificationName: $.trim($("#qualificationName"). val()),
       maxScore: $("#maxScore").val(),
       minScore: $("#minScore").val(),
-      calcDescription: $.trim($("#calcDescription"). val()),
+      resultCalcDescription: $.trim($("#resultCalcDescription option:selected"). val()),
+      resultCalcScore: $("#resultCalcScore").val(),
       gradeList: gradeList,
     },
     success: function(data){

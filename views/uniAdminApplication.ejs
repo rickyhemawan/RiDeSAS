@@ -25,7 +25,7 @@
 
           <% console.log(NOT_REVIEWED === e.otherProperty.status); %>
           <% if(e.otherProperty.status === NOT_REVIEWED) { %>
-            <div class="bottom-form-small"><a class="btn btn-primary"><b>Review application</b></a></div>
+            <div class="bottom-form-small"><a href="<%=programme._id%>/applicant/<%=e.otherProperty._id%>" class="btn btn-primary"><b>Review application</b></a></div>
           <% } else { %>
             <div class="bottom-form-small"><a class="btn btn-secondary"><b>Show Details</b></a></div>
           <% } %>

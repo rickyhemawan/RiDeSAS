@@ -10,5 +10,6 @@ router.post("/:id/edit-programme/:programmeID", ProgrammeController.editProgramm
 router.get("/:id/apply-for-programme/:programmeID", ProgrammeController.showApplyForProgrammeForm);
 router.post("/:id/apply-for-programme/:programmeID", ProgrammeController.applyForProgramme);
 router.get("/:id/show-applicants/:programmeID", ProgrammeController.showApplicants);
+router.get("/:id/show-applicants/:programmeID/applicant/:applicationID", ProgrammeController.reviewApplicant);
 
 module.exports = router;

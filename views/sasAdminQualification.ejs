@@ -14,7 +14,7 @@
         <h3><b><%= e.qualificationName %></b></h3>
         <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
         <hr/>
-        <p><%= e.resultCalcDescription %></p>
+        <p><%= e.resultCalcDescription %> <%= e.resultCalcScore %> subject(s)</p>
         <hr/>
         <h4><b>Grade List : </b><%= e.gradeList %></h4>
         <p><a href="/qualifications/<%=e._id %>" class="btn btn-primary" role="button">Edit Qualification</a></p>
