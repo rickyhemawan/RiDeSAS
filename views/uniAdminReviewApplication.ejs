@@ -1,23 +1,20 @@
 <%- include("uni_admin_partials/header") %>
   <div class="jumbotron sized-box">
-    <% console.log("reviewEjsSays=> ", programme); %>
-    <% console.log("reviewEjsSays=> ", application); %>
-    <% console.log("reviewEjsSays=> ", applicant); %>
     <h1>Review Application</h1>
     <h2>Review <%= applicant.name %>'s application of <%= programme.programmeName%></h2>
   </div>
-
-  <form class="" action="" method="post">
-    <div class="form-inline stretching-content sized-box">
-      <div></div>
-      <div class="form-inline">
-        <a class="btn btn-secondary btn-lg" href="/programmes/<%= universityID %>/show-applicants/<%= programme._id %>" role="button">Cancel</a>
-        <button id="reject-button" type="button" class="btn btn-lg btn-danger d-flex">Reject Application</button>
-        <button id="approve-button" type="button" class="btn btn-lg btn-success d-flex">Approve Application</button>
+  <% if(application.status === NOT_REVIEWED){ %>
+    <form class="" action="" method="post">
+      <div class="form-inline stretching-content sized-box">
+        <div></div>
+        <div class="form-inline">
+          <a class="btn btn-secondary btn-lg" href="/programmes/<%= universityID %>/show-applicants/<%= programme._id %>" role="button">Cancel</a>
+          <button id="reject-button" type="button" class="btn btn-lg btn-danger d-flex">Reject Application</button>
+          <button id="approve-button" type="button" class="btn btn-lg btn-success d-flex">Approve Application</button>
+        </div>
       </div>
-    </div>
-  </form>
-
+    </form>
+  <% }%>
   <div class="row">
   <% applicant.qualifications.forEach((f)=>{ %>
     <% let originalSubjectResults = [] %>
@@ -35,12 +32,9 @@
           <h4><b><%= f.subjectResults.length %></b> Subject(s) has been submitted.</h4>
           <h4><b><%= e.resultCalcDescription.slice(0,-2) %></b>:
             <% let x = 0%>
-            <% console.log("beforeSort =>", f.subjectResults); %>
             <%f.subjectResults.sort((a,b) => (a.score > b.score) ? -1 : ((b.score > a.score) ? 1 : 0)); %>
-            <% console.log("afterSort=>", f.subjectResults); %>
             <% let diff = f.subjectResults.length - e.resultCalcScore%>
             <% diff = diff < 0 ? 0 : diff%>
-            <% console.log("diff=>",diff); %>
             <% if(diff !== 0) {%>
               <%f.subjectResults.splice(f.subjectResults.length - diff, diff)%>
             <%}%>
@@ -72,5 +66,11 @@
       </div>
   <% }); %>
   </div>
+  <input type="hidden" id="universityID" value="<%= universityID %>" />
+  <input type="hidden" id="programmeID" value="<%= programme._id %>" />
+  <input type="hidden" id="applicationID" value="<%= application._id %>" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/script/uniAdminReviewApplication.js" charset="utf-8"></script>
 
 <%- include("uni_admin_partials/footer") %>

@@ -217,23 +217,16 @@ module.exports = {
       }
     });
   },
-  reviewApplicant(req, res){
+  showReviewApplicant(req, res){
     handleDifferentUser(req, {
       uniAdminCallback: () => {
-        console.log("params id =====", req.params.id);
-        console.log("params programmeID =====", req.params.programmeID);
-        console.log("params applicationID =====", req.params.applicationID);
         University.findById(req.params.id, (err, uniFound) => {
           if(err) console.log(err);
           else{
             uniFound.programmes.forEach((programme) => {
-              console.log("loop executed");
               if(programme._id.toString() === req.params.programmeID){
-                console.log("programme id found");
                 programme.applications.forEach((application) => {
-                  console.log("loop executed 2");
                   if(application._id.toString() === req.params.applicationID){
-                    console.log("applicationID found");
                     User.findById(application.applicantId, (err, userFound) => {
                       if(err) console.log(err);
                       else{
@@ -243,7 +236,70 @@ module.exports = {
                           application: application,
                           applicant: userFound,
                           universityID: req.params.id,
+                          NOT_REVIEWED: NOT_REVIEWED,
                         });
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  },
+  reviewApplicant(req, res){
+    handleDifferentUser(req, {
+      uniAdminCallback: () => {
+        console.log("post review applicant executed");
+        console.log("req params", req.params);
+        console.log("req body", req.body);
+        console.log("type of applicationID", typeof req.body.applicantID);
+
+        University.findById(req.params.id, (err, uniFound) => {
+          if(err) console.log(err);
+          else{
+            uniFound.programmes.forEach((programme, i) => {
+              console.log("loop executed");
+              if(programme._id.toString() === req.params.programmeID){
+                console.log("programme id found");
+                programme.applications.forEach((application, j) => {
+                  console.log("loop executed 2");
+                  console.log("type of application.id", typeof application._id.toString());
+                  console.log("applicationID found");
+                  if(application._id.toString() === req.params.applicationID){
+                    uniFound.programmes[i].applications[j].status = req.body.isApproved > 0 ? SUCCESSFUL : UNSUCESSFUL;
+
+                    User.findById(application.applicantId, (err, userFound) => {
+                      if(err) console.log(err);
+                      else{
+                        uniFound.save((err) => {
+                          console.log(err);
+                        });
+                        console.log("--------------------------------");
+                        console.log(process.env.ADMIN_EMAIL);
+                        console.log(process.env.ADMIN_PASSWORD);
+                        console.log(userFound.email);
+                        console.log("--------------------------------");
+
+                        const sendEmail = require("gmail-send")({
+                          user: process.env.ADMIN_EMAIL,
+                          pass: process.env.ADMIN_PASSWORD,
+                          to: userFound.email,
+                          subject: uniFound.universityName+"'s "+ programme.programmeName + " Result Announcement",
+                        });
+                        const approveMsg = "Hi " + userFound.name + ", \nYou have been accepted to the "+ programme.programmeName +" programme, please submit your application to " + uniFound.universityName +". For further information please contact the corresponding university. \nRegards,\nRiDeSAS Admin";
+                        const rejectMsg = "Hi " + userFound.name + ", \nYou have not been accepted to the "+ programme.programmeName +" programme, at " + uniFound.universityName +". For further information please contact the corresponding university. \nRegards,\nRiDeSAS Admin";
+                        sendEmail({
+                          text: req.body.isApproved > 0 ? approveMsg : rejectMsg,
+                        }, (error, result, fullResult) => {
+                          if(error) console.log(error);
+                          console.log(result);
+                        });
+                        console.log("User is founded", userFound);
+                        console.log("POST PARAMS*****",req.body);
+                        res.redirect("/");
                       }
                     });
                   }
