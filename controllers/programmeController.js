@@ -277,6 +277,12 @@ module.exports = {
                         uniFound.save((err) => {
                           console.log(err);
                         });
+                        console.log("--------------------------------");
+                        console.log(process.env.ADMIN_EMAIL);
+                        console.log(process.env.ADMIN_PASSWORD);
+                        console.log(userFound.email);
+                        console.log("--------------------------------");
+
                         const sendEmail = require("gmail-send")({
                           user: process.env.ADMIN_EMAIL,
                           pass: process.env.ADMIN_PASSWORD,
