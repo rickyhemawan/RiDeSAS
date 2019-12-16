@@ -51,6 +51,7 @@ $('#qualification-type-form').on('submit', function(e){
       resultCalcDescription: $.trim($("#resultCalcDescription option:selected"). val()),
       resultCalcScore: $("#resultCalcScore").val(),
       gradeList: gradeList,
+      needApproval: false,
     },
     success: function(data){
       console.log(data);
@@ -61,6 +62,22 @@ $('#qualification-type-form').on('submit', function(e){
 
  return false;
 
+});
+
+$('#reject-button').click(function(){
+  console.log("button clicked");
+  let deleteUrl = '/qualifications/'+$("#qualificationId").val();
+  console.log(deleteUrl);
+  let res = confirm("Are you sure you want to reject and delete this qualification?");
+  if(res){
+    $.ajax({
+      url: deleteUrl,
+      type: 'DELETE',
+      success: function(data){
+        window.location.href = "/qualifications";
+      }
+    });
+  }
 });
 
 $('#delete-button').click(function(){

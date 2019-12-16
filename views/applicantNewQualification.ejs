@@ -2,28 +2,30 @@
 <div class="jumbotron sized-box">
   <h1 class="main-title">Select Qualification</h1>
   <hr/>
-  <p>Select the qualification type to add or <a href="#">request new qualification type</a></p>
+  <p>Select the qualification type to add or <a href="/qualifications/applicant-create-qualification">create new qualification type</a></p>
 </div>
 
 <div class="row">
 <% qualifications.forEach((e)=>{ %>
-  <div class="col-sm-12 col-md-6">
-    <div class="thumbnail">
-      <div class="caption">
-        <form action="/qualifications/new-qualification" method="post">
-        <h3><b><%= e.qualificationName %></b></h3>
-        <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
-        <hr/>
-        <p><%= e.resultCalcDescription %> <%= e.resultCalcScore %> subject(s)</p>
-        <h4><b>Grade List : </b><%= e.gradeList %></h4>
-        <input type="hidden" name="qualification" value="<%= JSON.stringify(e) %>" />
-        <div class="bottom-form-small">
-          <button type="submit" class="btn btn-primary ">Create Qualification</button>
+  <% if(!e.needApproval){ %>
+    <div class="col-sm-12 col-md-6">
+      <div class="thumbnail">
+        <div class="caption">
+          <form action="/qualifications/new-qualification" method="post">
+          <h3><b><%= e.qualificationName %></b></h3>
+          <h4>Minimum Score: <%= e.minimumScore %>, Maximum Score: <%= e.maximumScore %></h4>
+          <hr/>
+          <p><%= e.resultCalcDescription %> <%= e.resultCalcScore %> subject(s)</p>
+          <h4><b>Grade List : </b><%= e.gradeList %></h4>
+          <input type="hidden" name="qualification" value="<%= JSON.stringify(e) %>" />
+          <div class="bottom-form-small">
+            <button type="submit" class="btn btn-primary ">Create Qualification</button>
+          </div>
+          </form>
         </div>
-        </form>
       </div>
     </div>
-  </div>
+  <% } %>
 <% }); %>
 </div>
 

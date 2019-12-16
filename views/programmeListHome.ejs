@@ -1,4 +1,5 @@
 <%- include(partials + "/header") %>
+<% let searchUni = universities%>
 <div class="jumbotron sized-box">
   <h1>RiDe</h1>
   <h2>Apply Programmes easily with Ricky Delia Student Application System</h2>
@@ -9,8 +10,14 @@
   <% } %>
 </div>
 
+<div class="form-inline">
+  <input id="search-textfield" type="text" class="form-control bottom-form" placeholder="Seach Keyword">
+  <button id="search-button" type="button" class="btn btn-primary bottom-form">Search</button>
+  <button id="clear-button" type="button" class="btn btn-secondary bottom-form" onclick="">Clear</button>
+</div>
+
 <div class="row">
-<% universities.forEach((u) => { %>
+<% searchUni.forEach((u) => { %>
   <% u.programmes.forEach((p) => { %>
     <div class="col-sm-12 col-md-6">
       <div class="thumbnail">
@@ -30,5 +37,8 @@
   <% }); %>
 <% });%>
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/programmeListHome.js" charset="utf-8"></script>
 
 <%- include(partials + "/footer") %>

@@ -19,6 +19,17 @@ module.exports = {
         University.find((err, found) => {
           if(err) console.log(err);
           else{
+            console.log(req.query);
+            if(req.query.q){
+              const queryRes = req.query.q;
+              found.forEach((e) => {
+                e.programmes.forEach((p, index, arr) => {
+                  if(!p.programmeName.toLowerCase().includes(queryRes)){
+                    delete arr[index];
+                  }
+                });
+              });
+            }
             // console.log(found);
             res.render("programmeListHome", {partials: nonAuthPartials, universities: found});
           }
@@ -30,8 +41,20 @@ module.exports = {
         University.find((err, found) => {
           if(err) console.log(err);
           else{
+            console.log(req.query);
+            if(req.query.q){
+              const queryRes = req.query.q;
+              found.forEach((e) => {
+                e.programmes.forEach((p, index, arr) => {
+                  if(!p.programmeName.toLowerCase().includes(queryRes)){
+                    delete arr[index];
+                  }
+                });
+              });
+            }
             // console.log(found);
-            res.render("programmeListHome", {partials: userPartials, universities: found});
+            res.render("programmeListHome", {partials: userPartials, universities: found,});
+
           }
         });
       },

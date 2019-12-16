@@ -1,0 +1,42 @@
+<%- include("user_partials/header") %>
+
+<form id="qualification-type-form" class="form-signin" action="/qualifications/new-qualification" method="post" >
+  <h1 class="main-title">Create Qualification</h1>
+  <label class="sized-box">Qualification Name</label>
+  <input type="text" class="form-control top-form" id="qualificationName" placeholder="Input Name">
+  <!-- <input type="text" required="" class="form-control middle-form" name="lName" placeholder="Last Name" required autofocus> -->
+
+  <label class="sized-box">Score</label>
+  <div class="form-inline">
+    <input type="number" class="form-control middle-form" placeholder="Minimum Score" id="minScore">
+    <label class="form-control middle-form">&#8212;</label>
+    <input type="number"  class="form-control middle-form" placeholder="Maximum Score" id="maxScore">
+  </div>
+
+
+  <div class="badge-pill-container">
+    <label id="add-grade-label">Grade List (Tap to remove)</label>
+    <div id="add-grade-list" class="badge-pill-container">
+    </div>
+  </div>
+
+  <div class="form-inline">
+    <input id="add-grade-textarea" type="text" class="form-control bottom-form" placeholder="Input Grade">
+    <button id="add-grade-button" type="button" class="btn btn-primary bottom-form">Add Grade</button>
+  </div>
+
+  <label class="sized-box">Result Calculation Description</label>
+  <div class="badge-pill-container">
+    <select class="form-control" name="resultCalcDescription" id="resultCalcDescription">
+      <option>Average of</option>
+      <option>Sum of</option>
+    </select>
+    <input type="number" class="form-control bottom-form" placeholder="Score" id="resultCalcScore">
+  </div>
+  <button type="submit" class="btn btn-lg btn-primary btn-block">Create Qualification</button>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="/script/sasAdminNewQualification.js" charset="utf-8"></script>
+
+<%- include("user_partials/footer") %>

@@ -53,18 +53,25 @@ module.exports = {
       },
     });
   },
+  showApplicantQualificationForm(req, res) {
+    handleDifferentUser(req, {
+      nonAuthUserCallback: () => res.redirect("/"),
+      sasAdminCallback: () => res.redirect("new-qualification"),
+      applicantCallback: () => res.render("applicantCreateQualification"),
+    });
+  },
   addQualification(req, res) {
     handleDifferentUser(req, {
       nonAuthUserCallback: () => res.redirect("/"),
       sasAdminCallback: () => {
-        console.log(req.body);
         const qualification = new Qualification({
           qualificationName: req.body.qualificationName,
           minimumScore: req.body.minScore,
           maximumScore: req.body.maxScore,
           resultCalcDescription: req.body.calcDescription,
-          resultCalcScore: req.body.calcDescriptionScore,
+          resultCalcScore: req.body.calcDescriptionScore ? req.body.calcDescriptionScore : 0,
           gradeList: req.body.gradeList,
+          needApproval: req.body.needApproval === "Approved" ? false : true,
         });
 
         qualification.save((err) => {
@@ -78,7 +85,28 @@ module.exports = {
         res.redirect("/qualifications");
       },
       applicantCallback: () => {
-        const chosenQualification = JSON.parse(req.body.qualification);
+        let chosenQualification;
+        console.log(req.body);
+        if(req.body.qualificationName){
+          chosenQualification = new Qualification({
+            qualificationName: req.body.qualificationName,
+            minimumScore: req.body.minScore,
+            maximumScore: req.body.maxScore,
+            resultCalcDescription: req.body.calcDescription,
+            resultCalcScore: req.body.calcDescriptionScore,
+            gradeList: req.body.gradeList,
+            needApproval: true,
+          });
+          chosenQualification.save((err) => {
+            if (err) {
+              console.log("Error while saving!", err);
+            } else {
+              console.log("Success Saving!");
+            }
+          });
+        }else{
+          chosenQualification = JSON.parse(req.body.qualification);
+        }
         User.findOne({
           username: getCurrentUserName()
         }, (err1, found) => {
@@ -126,9 +154,9 @@ module.exports = {
     handleDifferentUser(req, {
       nonAuthUserCallback: () => res.redirect("/"),
       sasAdminCallback: () => {
+        console.log("editSelectedQualification called");
         Qualification.findByIdAndUpdate(req.params.id, req.body, (err, foundQualification) => {
           console.log(err ? err : foundQualification);
-          console.log(req.body);
           res.redirect("/qualifications");
         });
       },

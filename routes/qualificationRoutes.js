@@ -4,6 +4,7 @@ const { QualificationController } = require('../controllers');
 
 router.get("/", QualificationController.showQualifications);
 router.get("/new-qualification", QualificationController.showQualificationForm);
+router.get("/applicant-create-qualification", QualificationController.showApplicantQualificationForm);
 router.post("/new-qualification", QualificationController.addQualification);
 router.get("/:id", QualificationController.showSelectedQualification);
 router.post("/:id", QualificationController.editSelectedQualification);

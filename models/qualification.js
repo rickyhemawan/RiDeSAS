@@ -21,6 +21,10 @@ const qualificationSchema = new Schema({
   },
   gradeList: {
     type: [String],
+  },
+  needApproval : {
+    type: Boolean,
+    default: false,
   }
 });
 

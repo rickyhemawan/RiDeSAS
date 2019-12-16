@@ -1,7 +1,19 @@
 <%- include("sas_admin_partials/header") %>
 
 <form id="qualification-type-form" class="form-signin" action="/qualifications/<%= qualification._id %>" method="post" >
-  <h1 class="main-title">Edit Qualification</h1>
+<% const needApproval = qualification.needApproval ? "(Requested by an Applicant)" : ""%>
+<% const needApprovalButton = qualification.needApproval ? "Approve & " : ""%>
+  <h1 class="main-title">Edit Qualification <b><%= needApproval %></b></h1>
+
+    <% if(qualification.needApproval){ %>
+        <div class="form-inline stretching-content">
+          <div></div>
+          <div class="form-inline">
+            <button id="reject-button" type="button" class="btn btn-danger d-flex">Reject Qualification</button>
+          </div>
+        </div>
+    <% } %>
+
   <label class="sized-box">Qualification Name</label>
   <input type="text" class="form-control top-form" id="qualificationName" placeholder="Input Name" value="<%= qualification.qualificationName %>">
   <!-- <input type="text" required="" class="form-control middle-form" name="lName" placeholder="Last Name" required autofocus> -->
@@ -31,14 +43,14 @@
       <option>Average of</option>
       <option>Sum of</option>
     </select>
-    <input type="number" class="form-control bottom-form" placeholder="Score" id="resultCalcScore">
+    <input type="number" class="form-control bottom-form" placeholder="Score" id="resultCalcScore" value="<%= qualification.resultCalcScore %>">
   </div>
   <div class="form-inline stretching-content">
     <div class="form-inline">
       <a class="btn btn-secondary btn-lg" href="/qualifications" role="button">Cancel</a>
       <button id="delete-button" type="button" class="btn btn-lg btn-danger d-flex">Delete</button>
     </div>
-    <button type="submit" class="btn btn-lg btn-primary d-flex">Edit Qualification</button>
+    <button type="submit" class="btn btn-lg btn-primary d-flex"><%= needApprovalButton %>Edit Qualification</button>
   </div>
 </form>
 
