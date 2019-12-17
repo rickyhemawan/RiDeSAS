@@ -71,7 +71,7 @@ module.exports = {
           resultCalcDescription: req.body.calcDescription,
           resultCalcScore: req.body.calcDescriptionScore ? req.body.calcDescriptionScore : 0,
           gradeList: req.body.gradeList,
-          needApproval: req.body.needApproval === "Approved" ? false : true,
+          needApproval: false,
         });
 
         qualification.save((err) => {
